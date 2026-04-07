@@ -1,0 +1,136 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #555;
+    margin: 20px 0 15px 0;
+    font-size: 1.2em;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 8px;
+}
+
+.input-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+input:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+.error {
+    margin-top: 15px;
+    padding: 10px;
+    background: #f8d7da;
+    color: #dc3545;
+    border-radius: 6px;
+    display: none;
+    font-size: 14px;
+}
+
+.counter {
+    margin: 20px 0;
+    padding: 12px;
+    background: #e9ecef;
+    border-radius: 6px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.counter span {
+    color: #007bff;
+    font-size: 1.3em;
+}
+
+.books-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.book-card {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    transition: transform 0.2s;
+}
+
+.book-card:hover {
+    transform: translateX(5px);
+    background: #e9ecef;
+}
+
+.book-card h3 {
+    margin: 0 0 8px 0;
+    color: #333;
+}
+
+.book-card p {
+    margin: 5px 0;
+    color: #666;
+}
+
+.book-card small {
+    color: #999;
+    font-size: 11px;
+    display: block;
+    margin-top: 8px;
+}
