@@ -1,26 +1,17 @@
-"use strict";
-
 class Book {
-    id;
-    title;
-    author;
-    createdAt;
     constructor(title, author) {
-        this.id = this.generateId();
-        this.title = this.normalizeString(title);
-        this.author = this.normalizeString(author);
+        this.id = Book.nextId++;
+        this.title = title;
+        this.author = author;
         this.createdAt = new Date();
-    }
-    generateId() {
-        return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-    }
-    normalizeString(str) {
-        return str.trim().replace(/\s+/g, ' ');
     }
     getInfo() {
         return `${this.title} — ${this.author}`;
     }
+
 }
+
+Book.nextId = 1
 
 class BookStorage {
     books = [];
@@ -44,13 +35,6 @@ class BookStorage {
 }
 
 class BookApp {
-    titleInput;
-    authorInput;
-    addButton;
-    errorBlock;
-    counterSpan;
-    booksContainer;
-    storage;
     constructor() {
         this.titleInput = document.getElementById('bookTitle');
         this.authorInput = document.getElementById('bookAuthor');
@@ -83,7 +67,7 @@ class BookApp {
     }
     validateInputs(title, author) {
         if (!title || !author) {
-            this.showError('Пожалуйста, заполните оба поля: название и автор.');
+            this.showError('Пожалуйста, заполните все поля.');
             return false;
         }
         return true;
@@ -121,7 +105,7 @@ class BookApp {
         }
         const newBook = new Book(title, author);
         if (this.storage.isDuplicate(newBook)) {
-            this.showError('Такая книга уже есть в списке!');
+            this.showError('Такая книга уже есть.');
             return;
         }
         const added = this.storage.addBook(newBook);
