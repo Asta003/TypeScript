@@ -1,11 +1,11 @@
 class BookItem {
-    id: string;
+    id: number;
     title: string;
     author: string;
     createdAt: Date;
 
-    constructor(title: string, author: string) {
-        this.id = Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+    constructor(title: string, author: string, nextId: number) {
+        this.id = nextId;
         this.title = this.cleanText(title);
         this.author = this.cleanText(author);
         this.createdAt = new Date();
@@ -18,11 +18,16 @@ class BookItem {
 
 class Library {
     private items: BookItem[] = [];
+    private nextId: number = 1;
 
-    add(book: BookItem): boolean {
-        if (this.hasDuplicate(book)) {
+    add(bookData: { title: string; author: string }): boolean {
+        if (this.hasDuplicate(bookData.title, bookData.author)) {
             return false;
         }
+
+        const book = new BookItem(bookData.title, bookData.author, this.nextId);
+        this.nextId++; 
+        
         this.items.push(book);
         return true;
     }
@@ -35,10 +40,10 @@ class Library {
         return this.items.length;
     }
 
-    hasDuplicate(book: BookItem): boolean {
+    hasDuplicate(title: string, author: string): boolean {
         return this.items.some(existing => 
-            existing.title.toLowerCase() === book.title.toLowerCase() &&
-            existing.author.toLowerCase() === book.author.toLowerCase()
+            existing.title.toLowerCase() === title.toLowerCase() &&
+            existing.author.toLowerCase() === author.toLowerCase()
         );
     }
 }
@@ -110,28 +115,31 @@ class BookManager {
     }
 
     private addNewBook(): void {
-        const rawTitle = this.titleField.value;
-        const rawAuthor = this.authorField.value;
-        
-        const cleanTitle = rawTitle.trim().replace(/\s+/g, ' ');
-        const cleanAuthor = rawAuthor.trim().replace(/\s+/g, ' ');
-        
-        if (!cleanTitle || !cleanAuthor) {
-            this.showError('Заполните оба поля!');
-            return;
-        }
-        
-        const newBook = new BookItem(cleanTitle, cleanAuthor);
-        
-        if (this.storage.hasDuplicate(newBook)) {
-            this.showError('Такая книга уже есть в списке!');
-            return;
-        }
-        
-        this.storage.add(newBook);
+    const rawTitle = this.titleField.value;
+    const rawAuthor = this.authorField.value;
+    
+    const cleanTitle = rawTitle.trim().replace(/\s+/g, ' ');
+    const cleanAuthor = rawAuthor.trim().replace(/\s+/g, ' ');
+    
+    if (!cleanTitle || !cleanAuthor) {
+        this.showError('Заполните оба поля!');
+        return;
+    }
+    
+    // Проверяем дубликат ДО создания книги
+    if (this.storage.hasDuplicate(cleanTitle, cleanAuthor)) {
+        this.showError('Такая книга уже есть в списке!');
+        return;
+    }
+    
+    // Передаём данные в add, а не готовый объект
+    const success = this.storage.add({ title: cleanTitle, author: cleanAuthor });
+    
+    if (success) {
         this.clearForm();
         this.refreshList();
     }
+}
 }
 
 document.addEventListener('DOMContentLoaded', () => {
