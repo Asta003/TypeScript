@@ -112,12 +112,12 @@ class BookManager {
         const cleanAuthor = rawAuthor.trim().replace(/\s+/g, ' ');
         
         if (!cleanTitle || !cleanAuthor) {
-            this.showError('Заполните оба поля!');
+            this.showError('Заполните все поля');
             return;
         }
         
         if (this.storage.hasDuplicate(cleanTitle, cleanAuthor)) {
-            this.showError('Такая книга уже есть в списке!');
+            this.showError('Такая книга уже есть в списке');
             return;
         }
         
