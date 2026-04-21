@@ -1,124 +1,135 @@
-class Book {
-    constructor(title, author) {
-        this.id = Book.nextId++;
-        this.title = title;
-        this.author = author;
+class BookItem {
+    constructor(title, author, nextId) {
+        this.id = nextId;
+        this.title = this.cleanText(title);
+        this.author = this.cleanText(author);
         this.createdAt = new Date();
     }
-    getInfo() {
-        return `${this.title} — ${this.author}`;
-    }
 
+    cleanText(text) {
+        return text.trim().replace(/\s+/g, ' ');
+    }
 }
 
-Book.nextId = 1
+class Library {
+    constructor() {
+        this.items = [];
+        this.nextId = 1;
+    }
 
-class BookStorage {
-    books = [];
-    addBook(book) {
-        if (this.isDuplicate(book)) {
+    add(bookData) {
+        if (this.hasDuplicate(bookData.title, bookData.author)) {
             return false;
         }
-        this.books.push(book);
+
+        const book = new BookItem(bookData.title, bookData.author, this.nextId);
+        this.nextId++;
+        
+        this.items.push(book);
         return true;
     }
-    getAllBooks() {
-        return [...this.books];
+
+    getAll() {
+        return [...this.items];
     }
-    getCount() {
-        return this.books.length;
+
+    count() {
+        return this.items.length;
     }
-    isDuplicate(book) {
-        return this.books.some((existingBook) => existingBook.title.toLowerCase() === book.title.toLowerCase() &&
-            existingBook.author.toLowerCase() === book.author.toLowerCase());
+
+    hasDuplicate(title, author) {
+        return this.items.some(existing => 
+            existing.title.toLowerCase() === title.toLowerCase() &&
+            existing.author.toLowerCase() === author.toLowerCase()
+        );
     }
 }
 
-class BookApp {
+class BookManager {
     constructor() {
-        this.titleInput = document.getElementById('bookTitle');
-        this.authorInput = document.getElementById('bookAuthor');
-        this.addButton = document.getElementById('addBookBtn');
-        this.errorBlock = document.getElementById('errorMessage');
-        this.counterSpan = document.getElementById('bookCounter');
-        this.booksContainer = document.getElementById('booksList');
-        this.storage = new BookStorage();
-        this.init();
+        this.titleField = document.getElementById('bookTitle');
+        this.authorField = document.getElementById('bookAuthor');
+        this.addBtn = document.getElementById('addBookBtn');
+        this.errorBox = document.getElementById('errorMessage');
+        this.counterDisplay = document.getElementById('bookCounter');
+        this.listContainer = document.getElementById('booksList');
+        
+        this.storage = new Library();
+        
+        this.addBtn.onclick = () => this.addNewBook();
+        this.refreshList();
     }
-    init() {
-        this.addButton.addEventListener('click', () => {
-            this.handleAddBook();
-        });
-        this.render();
-    }
-    normalizeString(str) {
-        return str.trim().replace(/\s+/g, ' ');
-    }
-    showError(message) {
-        this.errorBlock.textContent = message;
-        this.errorBlock.style.display = 'block';
+
+    showError(msg) {
+        this.errorBox.textContent = msg;
+        this.errorBox.style.display = 'block';
         setTimeout(() => {
-            this.errorBlock.style.display = 'none';
+            this.errorBox.style.display = 'none';
         }, 3000);
     }
-    clearInputs() {
-        this.titleInput.value = '';
-        this.authorInput.value = '';
+
+    clearForm() {
+        this.titleField.value = '';
+        this.authorField.value = '';
     }
-    validateInputs(title, author) {
-        if (!title || !author) {
-            this.showError('Пожалуйста, заполните все поля.');
-            return false;
+
+    refreshList() {
+        this.counterDisplay.textContent = this.storage.count().toString();
+        this.listContainer.innerHTML = '';
+        
+        const allBooks = this.storage.getAll();
+        for (let book of allBooks) {
+            const card = this.createCard(book);
+            this.listContainer.appendChild(card);
         }
-        return true;
     }
-    render() {
-        this.counterSpan.textContent = this.storage.getCount().toString();
-        this.booksContainer.innerHTML = '';
-        const allBooks = this.storage.getAllBooks();
-        allBooks.forEach((book) => {
-            const card = this.createBookCard(book);
-            this.booksContainer.appendChild(card);
-        });
-    }
-    createBookCard(book) {
+
+    createCard(book) {
         const card = document.createElement('div');
         card.className = 'book-card';
-        const titleElem = document.createElement('h3');
-        titleElem.textContent = book.title;
-        const authorElem = document.createElement('p');
-        authorElem.textContent = `Автор: ${book.author}`;
-        const idElem = document.createElement('small');
-        idElem.textContent = `ID: ${book.id}`;
-        card.appendChild(titleElem);
-        card.appendChild(authorElem);
-        card.appendChild(idElem);
+        card.innerHTML = `
+            <h3>${this.escapeHtml(book.title)}</h3>
+            <p>Автор: ${this.escapeHtml(book.author)}</p>
+            <small>ID: ${book.id}</small>
+        `;
         return card;
     }
-    handleAddBook() {
-        const rawTitle = this.titleInput.value;
-        const rawAuthor = this.authorInput.value;
-        const title = this.normalizeString(rawTitle);
-        const author = this.normalizeString(rawAuthor);
-        if (!this.validateInputs(title, author)) {
+
+    escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    addNewBook() {
+        const rawTitle = this.titleField.value;
+        const rawAuthor = this.authorField.value;
+        
+        const cleanTitle = rawTitle.trim().replace(/\s+/g, ' ');
+        const cleanAuthor = rawAuthor.trim().replace(/\s+/g, ' ');
+        
+        if (!cleanTitle || !cleanAuthor) {
+            this.showError('Заполните оба поля!');
             return;
         }
-        const newBook = new Book(title, author);
-        if (this.storage.isDuplicate(newBook)) {
-            this.showError('Такая книга уже есть.');
+        
+        if (this.storage.hasDuplicate(cleanTitle, cleanAuthor)) {
+            this.showError('Такая книга уже есть в списке!');
             return;
         }
-        const added = this.storage.addBook(newBook);
-        if (added) {
-            this.clearInputs();
-            this.render();
-        }
-        else {
-            this.showError('Не удалось добавить книгу.');
+        
+        const success = this.storage.add({ title: cleanTitle, author: cleanAuthor });
+        
+        if (success) {
+            this.clearForm();
+            this.refreshList();
         }
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-    new BookApp();
+    new BookManager();
 });
