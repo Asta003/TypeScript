@@ -122,17 +122,15 @@ class BookManager {
     const cleanAuthor = rawAuthor.trim().replace(/\s+/g, ' ');
     
     if (!cleanTitle || !cleanAuthor) {
-        this.showError('Заполните оба поля!');
+        this.showError('Заполните все поля');
         return;
     }
-    
-    // Проверяем дубликат ДО создания книги
+
     if (this.storage.hasDuplicate(cleanTitle, cleanAuthor)) {
-        this.showError('Такая книга уже есть в списке!');
+        this.showError('Такая книга уже есть в списке');
         return;
     }
-    
-    // Передаём данные в add, а не готовый объект
+
     const success = this.storage.add({ title: cleanTitle, author: cleanAuthor });
     
     if (success) {
