@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Список книг</title>
+</head>
+<body>
+
+<h1>Список книг</h1>
+
+<div>
+    <label>Название книги:</label>
+    <input type="text" id="titleInput" placeholder="Например: Война и мир">
+</div>
+
+<div>
+    <label>Автор:</label>
+    <input type="text" id="authorInput" placeholder="Например: Лев Толстой">
+</div>
+
+<button id="addBookBtn">Добавить книгу</button>
+
+<div id="errorMessage" style="color: red; margin-top: 10px;"></div>
+
+<div>
+    <strong>Всего книг: <span id="bookCounter">0</span></strong>
+</div>
+
+<hr>
+
+<div id="booksContainer"></div>
+
+<script src="./app.js"></script>
+</body>
+</html>

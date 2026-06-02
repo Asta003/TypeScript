@@ -1,0 +1,149 @@
+body {
+    text-align: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+h1 {
+    color: #4a5568;
+    font-size: 2em;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+label {
+    color: #2d3748;
+    font-weight: bold;
+    display: inline-block;
+    margin: 10px 0 5px;
+}
+
+input {
+    margin: 5px 0;
+    padding: 8px 12px;
+    width: 250px;
+    border: 2px solid #cbd5e0;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.2);
+}
+
+button {
+    margin: 15px 0;
+    padding: 10px 25px;
+    cursor: pointer;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.counter {
+    background: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin: 15px auto;
+    display: inline-block;
+    min-width: 150px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.counter strong {
+    color: #4a5568;
+    font-size: 16px;
+}
+
+#bookCounter {
+    color: #667eea;
+    font-size: 20px;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+hr {
+    margin: 20px 0;
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #cbd5e0, transparent);
+}
+
+#booksContainer {
+    text-align: left;
+    display: inline-block;
+    width: 100%;
+}
+
+.book-card {
+    border-left: 4px solid #667eea;
+    padding: 12px;
+    margin-bottom: 12px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.book-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.book-card h3 {
+    color: #2d3748;
+    margin: 0 0 8px 0;
+    font-size: 18px;
+}
+
+.book-card p {
+    color: #4a5568;
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.book-card small {
+    color: #a0aec0;
+    font-size: 12px;
+}
+
+#errorMessage {
+    margin: 10px auto;
+    padding: 10px;
+    border-radius: 8px;
+    font-weight: bold;
+    max-width: 80%;
+}
+
+/* Стили для разных типов сообщений */
+.error-style {
+    background: #fed7d7;
+    color: #c53030;
+    border-left: 4px solid #fc8181;
+}
+
+.success-style {
+    background: #c6f6d5;
+    color: #276749;
+    border-left: 4px solid #48bb78;
+}
